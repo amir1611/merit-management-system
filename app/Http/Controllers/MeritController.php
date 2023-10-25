@@ -32,7 +32,7 @@ class MeritController extends Controller
         $pointsType = $request->input('points_type'); // 'normal', 'committee', 'university_level', 'national_level', 'international_level'
 
         $points = [
-            'normal' => 10,
+            'attendance' => 10,
             'committee' => 20,
             'university_level' => 30,
             'national_level' => 40,
@@ -67,7 +67,7 @@ class MeritController extends Controller
         $pointsType = $request->input('points_type'); // 'normal', 'committee', 'university_level', 'national_level', 'international_level'
 
         $points = [
-            'normal' => 10,
+            'attendance' => 10,
             'committee' => 20,
             'university_level' => 30,
             'national_level' => 40,
