@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudentList;
-use App\Models\Program; // Add this line
 use Illuminate\Http\Request;
 
 class MeritController extends Controller
@@ -30,24 +29,32 @@ class MeritController extends Controller
     public function savePoints(Request $request)
     {
         $studentId = $request->input('student_id');
-        $pointsType = $request->input('points_type'); // 'normal' or 'committee'
-        $programId = $request->input('program_id'); // Add this line
+        $pointsType = $request->input('points_type'); // 'normal', 'committee', 'university_level', 'national_level', 'international_level'
 
-        $points = ($pointsType == 'committee') ? 15 : 10;
+        $points = [
+            'normal' => 10,
+            'committee' => 20,
+            'university_level' => 30,
+            'national_level' => 40,
+            'international_level' => 50,
+        ];
 
-        $student = StudentList::where('student_id', $studentId)->first();
+        if (array_key_exists($pointsType, $points)) {
+            $student = StudentList::where('student_id', $studentId)->first();
 
-        if ($student) {
-            // Add points to the student
-            $student->points += $points;
-            $student->save();
+            if ($student) {
+                $pointsToAdd = $points[$pointsType];
 
-            // Attach the program to the student
-            $student->programs()->attach($programId);
+                // Add points to the student
+                $student->points += $pointsToAdd;
+                $student->save();
 
-            return response()->json(['success' => true, 'message' => 'Points saved successfully']);
+                return response()->json(['success' => true, 'message' => 'Points saved successfully']);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Student not found']);
+            }
         } else {
-            return response()->json(['success' => false, 'message' => 'Student not found']);
+            return response()->json(['success' => false, 'message' => 'Invalid points type']);
         }
     }
 
@@ -57,24 +64,32 @@ class MeritController extends Controller
     public function removePoints(Request $request)
     {
         $studentId = $request->input('student_id');
-        $pointsType = $request->input('points_type'); // 'normal' or 'committee'
-        $programId = $request->input('program_id'); // Add this line
+        $pointsType = $request->input('points_type'); // 'normal', 'committee', 'university_level', 'national_level', 'international_level'
 
-        $points = ($pointsType == 'committee') ? 15 : 10;
+        $points = [
+            'normal' => 10,
+            'committee' => 20,
+            'university_level' => 30,
+            'national_level' => 40,
+            'international_level' => 50,
+        ];
 
-        $student = StudentList::where('student_id', $studentId)->first();
+        if (array_key_exists($pointsType, $points)) {
+            $student = StudentList::where('student_id', $studentId)->first();
 
-        if ($student) {
-            // Remove points from the student
-            $student->points = max(0, $student->points - $points);
-            $student->save();
+            if ($student) {
+                $pointsToRemove = $points[$pointsType];
 
-            // Detach the program from the student
-            $student->programs()->detach($programId);
+                // Remove points from the student
+                $student->points = max(0, $student->points - $pointsToRemove);
+                $student->save();
 
-            return response()->json(['success' => true, 'message' => 'Points removed successfully']);
+                return response()->json(['success' => true, 'message' => 'Points removed successfully']);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Student not found']);
+            }
         } else {
-            return response()->json(['success' => false, 'message' => 'Student not found']);
+            return response()->json(['success' => false, 'message' => 'Invalid points type']);
         }
     }
 }

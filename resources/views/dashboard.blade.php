@@ -1,5 +1,3 @@
-<!-- resources/views/merit.blade.php -->
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -15,40 +13,10 @@
                     <form id="searchForm">
                         <div class="mb-4">
                             <label for="studentId" class="block text-sm font-medium text-gray-600">Student ID:</label>
-                            <input type="text" id="studentId" name="student_id"
-                                class="mt-1 p-2 border rounded-md w-full">
+                            <input type="text" id="studentId" name="student_id" class="mt-1 p-2 border rounded-md w-full">
                         </div>
 
-                        <!-- Programs Dropdown -->
-                        {{-- <div class="mb-4">
-                            <label for="programId" class="block text-sm font-medium text-gray-600">Select
-                                Program:</label>
-                            <select id="programId" name="program_id" class="mt-1 p-2 border rounded-md w-full">
-                                <!-- Add default option -->
-                                <option value="" disabled selected>Select Program</option> --}}
-
-                                {{-- <!-- Add options for Football and Badminton -->
-        <option value="football">Football</option>
-        <option value="badminton">Badminton</option> --}}
-
-                                {{-- @php
-                                    $programs = \App\Models\Program::all();
-                                @endphp
-                                @foreach ($programs as $program)
-                                    <option value="{{ $program->id }}">{{ $program->program_name }}</option>
-                                @endforeach
-
-                            </select>
-                        </div> --}}
-
-
-
-
-
-
-
-                        <button type="button" onclick="searchStudent()" class="bg-black-500 text-white p-2 rounded-md"
-                            style="background-color: blue">Search</button>
+                        <button type="button" onclick="searchStudent()" class="bg-black-500 text-white p-2 rounded-md" style="background-color: blue">Search</button>
                     </form>
 
                     <!-- Display Information -->
@@ -60,110 +28,96 @@
                         <p><strong>Dorm:</strong> <span id="dormcodeValue"></span></p>
                         <br>
                         <p><strong>Total Points:</strong> <span id="pointsValue"></span></p>
-
-                        <!-- Display Programs and Points -->
-                        {{-- <div id="studentPrograms" class="mt-4"></div> --}}
                     </div>
 
-                    <!-- Buttons for Normal Member and Committee Member -->
+                    <!-- Buttons for Award and Remove Points -->
+                    <hr class="mt-4">
                     <div class="mt-4">
-                        <button type="button" onclick="savePoints('normal')"
-                            class="bg-red-500 text-white p-2 rounded-md" style="background-color: black;">Normal Member
-                            (10 points)</button>
-                        <button type="button" onclick="savePoints('committee')"
-                            class="bg-red-500 text-white p-2 rounded-md" style="background-color: rgb(64, 0, 255);">Committee
-                            Member (15 points)</button>
-                        <button type="button" onclick="removePoints()" class="bg-red-500 text-white p-2 rounded-md"
-                            style="background-color: red;">Remove Points</button>
+                        <button type="button" onclick="savePoints('attendance')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: black;">Attendance (10 points)</button>
+                        <button type="button" onclick="removePoints('attendance')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: red;">Remove Attendance (10 points)</button>
                     </div>
+                    <hr class="mt-4">
+                    <div class="mt-4">
+                        <button type="button" onclick="savePoints('committee')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: black;">Committee Member (20 points)</button>
+                        <button type="button" onclick="removePoints('committee')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: red;">Remove Committee Member (20 points)</button>
+                    </div>
+                    <hr class="mt-4">
+                    <div class="mt-4">
+                        <button type="button" onclick="savePoints('university_level')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: black;">University Level (30 points)</button>
+                        <button type="button" onclick="removePoints('university_level')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: red;">Remove University Level (30 points)</button>
+                    </div>
+                    <hr class="mt-4">
+                    <div class="mt-4">
+                        <button type="button" onclick="savePoints('national_level')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: black;">National Level (40 points)</button>
+                        <button type="button" onclick="removePoints('national_level')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: red;">Remove National Level (40 points)</button>
+                    </div>
+                    <hr class="mt-4">
+                    <div class="mt-4">
+                        <button type="button" onclick="savePoints('international_level')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: black;">International Level (50 points)</button>
+                        <button type="button" onclick="removePoints('international_level')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: red;">Remove International Level (50 points)</button>
+                    </div>
+                    <hr class="mt-4">
                 </div>
             </div>
         </div>
     </div>
-
-
-    <script>
-        function searchStudent() {
-            const studentId = document.getElementById('studentId').value;
-
-            // Make an AJAX request to fetch student information
-            fetch(`/api/search-student?student_id=${studentId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                             // Update basic information
-                document.getElementById('studentIdValue').innerText = data.data.student_id;
-                document.getElementById('studentNameValue').innerText = data.data.student_name;
-                document.getElementById('collegecodeValue').innerText = data.data.college_code;
-                document.getElementById('hostelcodeValue').innerText = data.data.hostel_code;
-                document.getElementById('dormcodeValue').innerText = data.data.dorm_code;
-                document.getElementById('pointsValue').innerText = data.data.points;
-
-                        // Update the #studentPrograms div with program information
-                        // displayStudentPrograms(data.data.programs);
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        // function displayStudentPrograms(programs) {
-        //     const studentProgramsDiv = document.getElementById('studentPrograms');
-        //     studentProgramsDiv.innerHTML = ''; // Clear previous content
-
-        //     if (programs.length > 0) {
-        //         const programsList = document.createElement('ul');
-        //         programs.forEach(program => {
-        //             const listItem = document.createElement('li');
-        //             listItem.innerText =
-        //             `${program.program_name}: ${program.pivot.points} points`; // Adjusted this line
-        //             programsList.appendChild(listItem);
-        //         });
-        //         studentProgramsDiv.appendChild(programsList);
-        //     } else {
-        //         studentProgramsDiv.innerText = 'This student has not joined any programs.';
-        //     }
-        // }
-
-
-
-        function savePoints(pointsType) {
-            const studentId = document.getElementById('studentId').value;
-
-            // Make an AJAX request to save points for the selected pointsType
-            fetch(`/api/save-points?student_id=${studentId}&points_type=${pointsType}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        // Optionally, update the displayed points in #studentInfo
-                        searchStudent();
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function removePoints() {
-            const studentId = document.getElementById('studentId').value;
-
-            // Make an AJAX request to remove points for the current student
-            fetch(`/api/remove-points?student_id=${studentId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        // Optionally, update the displayed points in #studentInfo
-                        searchStudent();
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    </script>
-
-
 </x-app-layout>
+
+<script>
+    function searchStudent() {
+        const studentId = document.getElementById('studentId').value;
+
+        // Make an AJAX request to fetch student information
+        fetch(`/api/search-student?student_id=${studentId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('studentIdValue').innerText = data.data.student_id;
+                    document.getElementById('studentNameValue').innerText = data.data.student_name;
+                    document.getElementById('collegecodeValue').innerText = data.data.college_code;
+                    document.getElementById('hostelcodeValue').innerText = data.data.hostel_code;
+                    document.getElementById('dormcodeValue').innerText = data.data.dorm_code;
+                    document.getElementById('pointsValue').innerText = data.data.points;
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function savePoints(pointsType) {
+        const studentId = document.getElementById('studentId').value;
+
+        // Make an AJAX request to save points for the selected pointsType
+        fetch(`/api/save-points?student_id=${studentId}&points_type=${pointsType}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    // Optionally, update the displayed points in #studentInfo
+                    searchStudent();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function removePoints(pointsType) {
+        const studentId = document.getElementById('studentId').value;
+
+        // Make an AJAX request to remove points for the selected pointsType
+        fetch(`/api/remove-points?student_id=${studentId}&points_type=${pointsType}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    // Optionally, update the displayed points in #studentInfo
+                    searchStudent();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>

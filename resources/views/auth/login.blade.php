@@ -1,4 +1,8 @@
 <x-guest-layout>
+
+    <div class="text-center text-2xl font-semibold text-gray-800 py-4">
+        PEKA MERIT MANAGEMENT SYSTEM
+    </div>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
