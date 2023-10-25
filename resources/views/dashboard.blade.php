@@ -19,19 +19,18 @@
                         </div>
 
                      <!-- Programs Dropdown -->
-
-{{-- <div class="mb-4">
+<div class="mb-4">
     <label for="programId" class="block text-sm font-medium text-gray-600">Select Program:</label>
     <select id="programId" name="program_id" class="mt-1 p-2 border rounded-md w-full">
-        <!-- Add default option --> --}}
-        {{-- <option value="" disabled selected>Select Program</option> --}}
+        <!-- Add default option -->
+        <option value="" disabled selected>Select Program</option>
 
         {{-- <!-- Add options for Football and Badminton -->
         <option value="football">Football</option>
         <option value="badminton">Badminton</option> --}}
 
 
-        {{-- @php
+        @php
             $programs = \App\Models\Program::all();
         @endphp
         @foreach($programs as $program)
@@ -39,7 +38,7 @@
         @endforeach
 
     </select>
-</div> --}}
+</div>
 
 
 
@@ -52,13 +51,9 @@
 
                   <!-- Display Information -->
 <div id="studentInfo" class="mt-4">
-    <p><strong>ID:</strong> <span id="studentIdValue"></span></p>
-    <p><strong>Name:</strong> <span id="studentNameValue"></span></p>
-    <p><strong>College:</strong> <span id="collegecodeValue"></span></p>
-    <p><strong>Hostel:</strong> <span id="hostelcodeValue"></span></p>
-    <p><strong>Dorm:</strong> <span id="dormcodeValue"></span></p>
-    <br>
-    <p><strong>Total Points:</strong> <span id="pointsValue"></span></p>
+    <p><strong>Student ID:</strong> <span id="studentIdValue"></span></p>
+    <p><strong>Student Name:</strong> <span id="studentNameValue"></span></p>
+    <p><strong>Points:</strong> <span id="pointsValue"></span></p>
 
     <!-- Display Programs and Points -->
     <div id="studentPrograms" class="mt-4"></div>
@@ -68,12 +63,8 @@
                     <div class="mt-4">
                         <button type="button" onclick="savePoints('normal')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: black;">Normal Member (10 points)</button>
                         <button type="button" onclick="savePoints('committee')" class="bg-red-500 text-white p-2 rounded-md" style="background-color: black;">Committee Member (15 points)</button>
-                        <button type="button" onclick="removePoints()" class="bg-red-500 text-white p-2 rounded-md" style="background-color: red;">Remove Points</button>
+                        <button type="button" onclick="removePoints()" class="bg-red-500 text-white p-2 rounded-md" style="background-color: black;">Remove Points</button>
                     </div>
-
-
-
-
                 </div>
             </div>
         </div>
@@ -81,8 +72,8 @@
 
 
 <script>
-function searchStudent() {
-    const studentId = document.getElementById('studentId').value;
+    function searchStudent() {
+        const studentId = document.getElementById('studentId').value;
 
     // Make an AJAX request to fetch student information
     fetch(`/api/search-student?student_id=${studentId}`)
@@ -92,12 +83,7 @@ function searchStudent() {
                 // Update basic information
                 document.getElementById('studentIdValue').innerText = data.data.student_id;
                 document.getElementById('studentNameValue').innerText = data.data.student_name;
-                document.getElementById('collegecodeValue').innerText = data.data.college_code;
-                document.getElementById('hostelcodeValue').innerText = data.data.hostel_code;
-                document.getElementById('dormcodeValue').innerText = data.data.dorm_code;
                 document.getElementById('pointsValue').innerText = data.data.points;
-
-
 
                 // Update the #studentPrograms div with program information
                 displayStudentPrograms(data.data.programs);
@@ -162,26 +148,6 @@ function displayStudentPrograms(programs) {
             })
             .catch(error => console.error('Error:', error));
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        // Fetch programs data
-        fetch('/api/programs')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Populate programs dropdown
-                    const programDropdown = document.getElementById('programId');
-                    data.programs.forEach(program => {
-                        const option = document.createElement('option');
-                        option.value = program.id;
-                        option.text = program.program_name;
-                        programDropdown.add(option);
-                    });
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    });
-
 </script>
 
 
